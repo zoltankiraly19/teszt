@@ -1,14 +1,17 @@
-# Válassz egy alap Python képet
+# Használj egy hivatalos Python képfájlt (alapként)
 FROM python:3.9-slim
 
-# Állítsd be a munkakönyvtárat
+# Állítsd be a munkakönyvtárat a konténerben
 WORKDIR /app
 
-# Másold át a projekt összes fájlját a konténerbe
+# Másold át az aktuális könyvtár tartalmát a konténer /app könyvtárába
 COPY . .
 
-# Telepítsd a Python függőségeket a requirements.txt fájlból
-RUN if [ -f req.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
+# Telepítsd a szükséges csomagokat, amiket a requirements.txt-ben jelöltél meg
+RUN pip install --no-cache-dir -r req.txt
 
-# Add meg, hogy mit futtasson a konténer indításkor
+# Tedd elérhetővé a 80-as portot (ha szükséges)
+EXPOSE 80
+
+# Indítsd el a main.py fájlt a konténer indulásakor
 CMD ["python", "main.py"]
