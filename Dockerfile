@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Telepítsd a Python függőségeket a requirements.txt fájlból
-RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
+RUN if [ -f req.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
 
 # Add meg, hogy mit futtasson a konténer indításkor
 CMD ["python", "main.py"]
