@@ -7,7 +7,7 @@ WORKDIR /app
 # Másold át a projekt összes fájlját a konténerbe
 COPY . .
 
-# Telepítsd a Python függőségeket, ha van requirements.txt (ha nincs, hagyd ki ezt)
+# Telepítsd a Python függőségeket a requirements.txt fájlból
 RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
 
 # Add meg, hogy mit futtasson a konténer indításkor
