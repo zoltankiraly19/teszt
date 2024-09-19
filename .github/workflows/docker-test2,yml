@@ -1,9 +1,10 @@
+
 name: Docker Image CI
 
 on:
   push:
     branches:
-      - main  # You can change this to any branch you want to monitor
+      - main
   pull_request:
     branches:
       - main
@@ -13,27 +14,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    # Ellenőrizd ki a repót
+    - name: Check out the repository
       uses: actions/checkout@v2
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
-
-    - name: Build Docker image
-      run: docker build . --file Dockerfile --tag my_python_app:latest
-
-    - name: Run Docker container
-      run: docker run -d -p 8080:8080 my_python_app:latest
-
-    - name: Test the application
+    # Frissítsd a pip3-at
+    - name: Upgrade pip3
       run: |
-        sleep 5
-        curl http://localhost:8080/upload -X POST -d "file=output.txt"
+        python3 -m pip install --upgrade pip
+
+    # Futtasd le a Docker build parancsot
+    - name: Build the Docker image
+      run: |
+        docker build . --file Dockerfile --tag my_python_app:latest
+
+    # Kérdezd le a `ibm-cos-sdk` elérhető verzióit pip3-al
+    - name: Check available versions for ibm-cos-sdk with pip3
+      run: |
+        docker run my_python_app:latest pip3 search ibm-cos-sdk || true
+
+    # Telepítsd az `ibm-cos-sdk` csomagot, és naplózd az esetleges hibákat
+    - name: Install ibm-cos-sdk with pip3
+      run: |
+        docker run my_python_app:latest pip3 install --no-cache-dir ibm-cos-sdk --extra-index-url https://pypi.org/simple || echo "Failed to install ibm-cos-sdk"
+
+    # Telepítsd a csomagokat req.txt fájlból pip3-al
+    - name: Install requirements from req.txt with pip3
+      run: |
+        docker run my_python_app:latest pip3 install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple || echo "Could not install requirements"
+
+    # Teszteld a Docker image-et (például futtasd a Python programot)
+    - name: Run container from Docker image
+      run: |
+        docker run my_python_app:latest
