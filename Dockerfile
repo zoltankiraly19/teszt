@@ -10,11 +10,11 @@ COPY . .
 # Frissítsd a pip-et
 RUN pip install --upgrade pip
 
-# Telepítsd a szükséges csomagokat, amiket a requirements.txt-ben jelöltél meg
+# Telepítsd a szükséges csomagokat a requirements.txt alapján
 RUN pip install --no-cache-dir -r req.txt
 
-# Tedd elérhetővé a 80-as portot (ha szükséges)
-EXPOSE 80
+# Töröld az EXPOSE utasítást, mivel nem futtatsz webszervert
+# EXPOSE 80  -> EZT ELTÁVOLÍTJUK
 
 # Indítsd el a main.py fájlt a konténer indulásakor
-CMD ["python", "main.py"]
+CMD ["python",
