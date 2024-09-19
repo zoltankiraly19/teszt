@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Ellenőrizd ki a repót
+    - name: Check out the repository
+      uses: actions/checkout@v2
+
+    # Futtasd le a Docker build parancsot
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my_python_app:latest
+
+    # Teszteld a Docker image-et (például futtatod a Python programot)
+    - name: Run container from Docker image
+      run: docker run my_python_app:latest
