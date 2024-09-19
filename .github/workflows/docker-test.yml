@@ -11,42 +11,36 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+    # Ellenőrizd ki a repót
     - name: Check out the repository
       uses: actions/checkout@v2
 
+    # Frissítsd a pip3-at
     - name: Upgrade pip3
       run: |
         python3 -m pip install --upgrade pip
 
-    - name: Display req.txt content
-      run: cat req.txt
-
+    # Futtasd le a Docker build parancsot
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag my_python_app:latest
 
-    - name: Check available versions for ibm_boto3 with pip3
+    # Kérdezd le a `ibm-cos-sdk` elérhető verzióit pip3-al
+    - name: Check available versions for ibm-cos-sdk with pip3
       run: |
-        docker run my_python_app:latest pip3 index versions ibm_boto3
+        docker run my_python_app:latest pip3 index versions ibm-cos-sdk
 
-    - name: Run pip3 install with alternative index URL
+    # Telepítsd az `ibm-cos-sdk` csomagot
+    - name: Install ibm-cos-sdk
       run: |
-        docker run my_python_app:latest pip3 install --no-cache-dir --extra-index-url https://pypi.org/simple ibm_boto3
+        docker run my_python_app:latest pip3 install --no-cache-dir ibm-cos-sdk --extra-index-url https://pypi.org/simple
 
+    # Telepítsd a csomagokat req.txt fájlból pip3-al
     - name: Install requirements from req.txt with pip3
       run: |
-        docker run my_python_app:latest pip3 install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple --extra-index-url https://public.dhe.ibm.com/ibmdl/export/pub/software/server/ibm-ai/yum/ibm-ai/python || echo "Could not install requirements"
+        docker run my_python_app:latest pip3 install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple || echo "Could not install requirements"
 
-    - name: Display pip version and available packages
-      run: |
-        docker run my_python_app:latest pip --version
-        docker run my_python_app:latest pip list
-
-    - name: Run container from Docker image
-      run: |
-        docker run my_python_app:latest
-
-    - name: Clean up Docker
-      run: |
-        docker rmi my_python_app:latest
+    # Teszteld a Docker image-et (például futtasd a Python programot)
+    - name: Run container from
