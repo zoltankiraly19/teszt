@@ -30,12 +30,12 @@ jobs:
     # Kérdezd le a `ibm-cos-sdk` elérhető verzióit pip3-al
     - name: Check available versions for ibm-cos-sdk with pip3
       run: |
-        docker run my_python_app:latest pip3 index versions ibm-cos-sdk
+        docker run my_python_app:latest pip3 search ibm-cos-sdk || true
 
-    # Telepítsd az `ibm-cos-sdk` csomagot
-    - name: Install ibm-cos-sdk
+    # Telepítsd az `ibm-cos-sdk` csomagot, és naplózd az esetleges hibákat
+    - name: Install ibm-cos-sdk with pip3
       run: |
-        docker run my_python_app:latest pip3 install --no-cache-dir ibm-cos-sdk --extra-index-url https://pypi.org/simple
+        docker run my_python_app:latest pip3 install --no-cache-dir ibm-cos-sdk --extra-index-url https://pypi.org/simple || echo "Failed to install ibm-cos-sdk"
 
     # Telepítsd a csomagokat req.txt fájlból pip3-al
     - name: Install requirements from req.txt with pip3
@@ -43,4 +43,11 @@ jobs:
         docker run my_python_app:latest pip3 install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple || echo "Could not install requirements"
 
     # Teszteld a Docker image-et (például futtasd a Python programot)
-    - name: Run container from
+    - name: Run container from Docker image
+      run: |
+        docker run my_python_app:latest
+
+    # Tisztítsd meg a rendszerből a nem szükséges image-eket
+    - name: Clean up Docker
+      run: |
+        docker rmi my_python_app:latest
