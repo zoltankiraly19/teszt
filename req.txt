@@ -1,1 +1,1 @@
-ibm_boto3
+ibm_boto3==3.13.4
