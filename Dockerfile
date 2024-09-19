@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir -r req.txt
 EXPOSE 80
 
 # Indítsd el a main.py fájlt a konténer indulásakor
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
