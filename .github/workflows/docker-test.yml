@@ -17,30 +17,30 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v2
 
-    # Frissítsd a pip-et
-    - name: Upgrade pip
+    # Frissítsd a pip3-at
+    - name: Upgrade pip3
       run: |
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
 
     # Futtasd le a Docker build parancsot
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag my_python_app:latest
 
-    # Kérdezd le a `ibm_boto3` elérhető verzióit
-    - name: Check available versions for ibm_boto3
+    # Kérdezd le a `ibm_boto3` elérhető verzióit pip3-al
+    - name: Check available versions for ibm_boto3 with pip3
       run: |
-        docker run my_python_app:latest pip index versions ibm_boto3
+        docker run my_python_app:latest pip3 index versions ibm_boto3
 
-    # Alternatív PyPI tükör használata a pip install során
-    - name: Run pip install with alternative index URL
+    # Alternatív PyPI tükör használata a pip3 install során
+    - name: Run pip3 install with alternative index URL
       run: |
-        docker run my_python_app:latest pip install --no-cache-dir --extra-index-url https://pypi.org/simple ibm_boto3
+        docker run my_python_app:latest pip3 install --no-cache-dir --extra-index-url https://pypi.org/simple ibm_boto3
 
-    # Telepítsd a csomagokat req.txt fájlból
-    - name: Install requirements from req.txt
+    # Telepítsd a csomagokat req.txt fájlból pip3-al
+    - name: Install requirements from req.txt with pip3
       run: |
-        docker run my_python_app:latest pip install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple || echo "Could not install requirements"
+        docker run my_python_app:latest pip3 install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple || echo "Could not install requirements"
 
     # Teszteld a Docker image-et (például futtasd a Python programot)
     - name: Run container from Docker image
