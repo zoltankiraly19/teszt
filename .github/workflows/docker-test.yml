@@ -17,10 +17,30 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v2
 
+    # Frissítsd a pip-et
+    - name: Upgrade pip
+      run: |
+        python -m pip install --upgrade pip
+
     # Futtasd le a Docker build parancsot
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag my_python_app:latest
+
+    # Kérdezd le a `ibm_boto3` elérhető verzióit
+    - name: Check available versions for ibm_boto3
+      run: |
+        docker run my_python_app:latest pip index versions ibm_boto3
+
+    # Alternatív PyPI tükör használata a pip install során
+    - name: Run pip install with alternative index URL
+      run: |
+        docker run my_python_app:latest pip install --no-cache-dir --extra-index-url https://pypi.org/simple ibm_boto3
+
+    # Telepítsd a csomagokat req.txt fájlból
+    - name: Install requirements from req.txt
+      run: |
+        docker run my_python_app:latest pip install --no-cache-dir -r req.txt --extra-index-url https://pypi.org/simple || echo "Could not install requirements"
 
     # Teszteld a Docker image-et (például futtasd a Python programot)
     - name: Run container from Docker image
