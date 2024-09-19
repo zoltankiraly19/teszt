@@ -1,5 +1,6 @@
 name: Docker Image CI
 
+# Workflow futtatása minden push és pull request esetén a main ágon
 on:
   push:
     branches:
@@ -17,10 +18,22 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v2
 
+    # Ellenőrizd az internetkapcsolatot
+    - name: Check internet connection
+      run: |
+        ping -c 3 pypi.org || (echo "No internet connection" && exit 1)
+
     # Futtasd le a Docker build parancsot
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my_python_app:latest
+      run: |
+        docker build . --file Dockerfile --tag my_python_app:latest
 
-    # Teszteld a Docker image-et (például futtatod a Python programot)
+    # Teszteld a Docker image-et (például futtasd a Python programot)
     - name: Run container from Docker image
-      run: docker run my_python_app:latest
+      run: |
+        docker run my_python_app:latest
+
+    # Tisztítsd meg a rendszerből a nem szükséges image-eket
+    - name: Clean up Docker
+      run: |
+        docker rmi my_python_app:latest
