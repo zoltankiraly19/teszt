@@ -11,7 +11,7 @@ COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/e4dcac9c
 @app.route('/upload', methods=['POST'])
 def upload_file():
     bucket_name = "elek-donotdelete-pr-tpbfrekjccp3nj"
-    file_name = "output.txt"
+    file_name = "output222.txt"
     text_data = "Ez egy teszt szöveg."
 
     cos = ibm_boto3.client('s3',
