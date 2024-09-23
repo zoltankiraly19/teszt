@@ -4,16 +4,23 @@ from ibm_botocore.client import Config
 
 app = Flask(__name__)
 
-COS_ENDPOINT = "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-COS_API_KEY_ID = "cC326fk6u3sRdRsIGE_gyleGM24gynn__WeDyMoqQ52M"
-COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/e4dcac9c25e9473485989a3a05ee4ec1:04e94adb-84d3-42d2-ad14-3e0ca6eb4af5::"
+# Gyökér útvonal ("/") kezelése
+@app.route('/')
+def home():
+    return "Hello, Flask alkalmazás!"
+
+# IBM Cloud Object Storage beállítások
+COS_ENDPOINT = "https://s3.us-south.cloud-object-storage.appdomain.cloud"  # Public endpoint
+COS_API_KEY_ID = "Pzvf_TUf9ie3MG7qncE7uWqd6CNX35etCldmmorZ2vvZ"  # API kulcs
+COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/4ce442c9be554c829a35744d0bbee4:62081540-1bf6-437a-8ab5-6c308a8adf56::"  # CRN
+bucket_name = "elek-donotdelete-pr-flomvcezkdcypu"  # Bucket neve
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    bucket_name = "elek-donotdelete-pr-tpbfrekjccp3nj"
-    file_name = "output222.txt"
+    file_name = "output111.txt"
     text_data = "Ez egy teszt szöveg."
 
+    # IBM COS boto3 kliens létrehozása
     cos = ibm_boto3.client('s3',
                            ibm_api_key_id=COS_API_KEY_ID,
                            ibm_service_instance_id=COS_INSTANCE_CRN,
@@ -21,7 +28,7 @@ def upload_file():
                            endpoint_url=COS_ENDPOINT)
 
     try:
-        # Fájl feltöltése a bucketbe
+        # Fájl feltöltése az IBM Cloud Object Storage-ba
         cos.put_object(
             Bucket=bucket_name,
             Key=file_name,
@@ -33,4 +40,4 @@ def upload_file():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)
