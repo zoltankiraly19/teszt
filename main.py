@@ -11,8 +11,8 @@ def home():
 
 # IBM Cloud Object Storage beállítások
 COS_ENDPOINT = "https://s3.us-south.cloud-object-storage.appdomain.cloud"  # Public endpoint
-COS_API_KEY_ID = "Pzvf_TUf9ie3MG7qncE7uWqd6CNX35etCldmmorZ2vvZ"  # API kulcs
-COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/4ce442c9be554c829a35744d0bbee4:62081540-1bf6-437a-8ab5-6c308a8adf56::"  # CRN
+COS_API_KEY_ID = "nXkSMheA7GT9zdnrHJwKSqmn-VCJPhXGe7XstbLvrLW2"  # Új API kulcs
+COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/46c4f2c9bc554c8293a3574f4d0bee64:6208154c-1bfc-437a-8ab5-6c3088afdf56:bucket:elek-donotdelete-pr-flomvcezkdcypu"  # Új CRN
 bucket_name = "elek-donotdelete-pr-flomvcezkdcypu"  # Bucket neve
 
 @app.route('/upload', methods=['POST'])
